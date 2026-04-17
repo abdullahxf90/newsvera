@@ -18,6 +18,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import BreakingNewsTicker from "@/components/layout/BreakingNewsTicker";
 import CookieBanner from "@/components/layout/CookieBanner";
+import ClientLayout from "@/components/layout/ClientLayout";
 import { siteConfig } from "@/../../config/site";
 
 export const metadata: Metadata = {
@@ -96,13 +97,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary-900 text-white px-4 py-2 rounded z-50">
           Skip to main content
         </a>
-        <BreakingNewsTicker />
-        <Header />
-        <main id="main-content">
+        <ClientLayout
+          ticker={<BreakingNewsTicker />}
+          header={<Header />}
+          footer={<Footer />}
+          cookie={<CookieBanner />}
+        >
           {children}
-        </main>
-        <Footer />
-        <CookieBanner />
+        </ClientLayout>
       </body>
     </html>
   );

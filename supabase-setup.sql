@@ -70,7 +70,59 @@ create policy "Authenticated users can delete images"
 
 
 -- =====================================================
--- STEP 3: Create your admin account
+-- STEP 3: Ads table
+-- =====================================================
+
+create table if not exists ads (
+  id         text primary key default gen_random_uuid()::text,
+  slot_id    text not null,
+  name       text,
+  type       text not null default 'image',
+  image_url  text,
+  link_url   text,
+  html_code  text,
+  alt_text   text,
+  is_active  boolean default true,
+  created_at timestamptz default now()
+);
+
+alter table ads enable row level security;
+
+create policy "Public can read ads"
+  on ads for select using (true);
+
+create policy "Authenticated users can manage ads"
+  on ads for all
+  using (auth.role() = 'authenticated')
+  with check (auth.role() = 'authenticated');
+
+
+-- =====================================================
+-- STEP 4: Breaking news table
+-- =====================================================
+
+create table if not exists breaking_news (
+  id         text primary key default gen_random_uuid()::text,
+  text       text not null,
+  link       text,
+  is_active  boolean default true,
+  sort_order int default 0,
+  created_at timestamptz default now()
+);
+
+alter table breaking_news enable row level security;
+
+create policy "Public can read breaking news"
+  on breaking_news for select using (true);
+
+create policy "Authenticated users can manage breaking news"
+  on breaking_news for all
+  using (auth.role() = 'authenticated')
+  with check (auth.role() = 'authenticated');
+
+
+-- =====================================================
+-- STEP 5: Create your admin account
 -- Go to: Authentication → Users → Add User
 --   Enter your email and password
 --   That's it — you can now log in at yoursite.com/admin

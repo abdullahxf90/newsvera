@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase-admin";
-import { useRouter } from "next/navigation";
 
 interface ArticleRow {
   id: string;
@@ -17,7 +16,6 @@ interface ArticleRow {
 }
 
 export default function AdminDashboard() {
-  const router = useRouter();
   const [articles, setArticles] = useState<ArticleRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -46,45 +44,13 @@ export default function AdminDashboard() {
     setDeleting(null);
   }
 
-  async function handleLogout() {
-    const supabase = createAdminClient();
-    await supabase.auth.signOut();
-    router.push("/admin/login");
-  }
-
   const filtered = articles.filter((a) =>
     a.title.toLowerCase().includes(search.toLowerCase()) ||
     a.category.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Top bar */}
-      <header className="bg-gray-900 border-b border-gray-800 px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <h1 className="text-white font-bold text-xl" style={{ fontFamily: "'Playfair Display', serif" }}>
-            News<span className="text-yellow-500">vera</span>
-          </h1>
-          <span className="text-gray-500 text-sm">/ Admin</span>
-        </div>
-        <div className="flex items-center gap-3">
-          <Link
-            href="/"
-            target="_blank"
-            className="text-sm text-gray-400 hover:text-white transition-colors"
-          >
-            View Site ↗
-          </Link>
-          <button
-            onClick={handleLogout}
-            className="text-sm text-gray-400 hover:text-red-400 transition-colors"
-          >
-            Sign Out
-          </button>
-        </div>
-      </header>
-
-      <main className="flex-1 px-6 py-8 max-w-6xl mx-auto w-full">
+    <div className="px-6 py-8 max-w-6xl mx-auto w-full">
         {/* Actions row */}
         <div className="flex items-center justify-between mb-6 gap-4">
           <input
@@ -173,7 +139,6 @@ export default function AdminDashboard() {
             </div>
           )}
         </div>
-      </main>
     </div>
   );
 }

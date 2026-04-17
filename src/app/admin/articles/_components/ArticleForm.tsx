@@ -156,11 +156,11 @@ export default function ArticleForm({ initial }: { initial?: ArticleData }) {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Top bar */}
-      <header className="bg-gray-900 border-b border-gray-800 px-6 py-4 flex items-center gap-4">
+    <div className="flex flex-col">
+      {/* Sub-header */}
+      <div className="border-b border-gray-800 px-6 py-3 flex items-center gap-4 bg-gray-900/50">
         <Link href="/admin" className="text-gray-400 hover:text-white text-sm transition-colors">
-          ← Back
+          ← Articles
         </Link>
         <div className="flex-1">
           <h1 className="text-white font-semibold text-sm">
@@ -175,7 +175,7 @@ export default function ArticleForm({ initial }: { initial?: ArticleData }) {
         >
           {saving ? "Saving…" : data.id ? "Update" : "Publish"}
         </button>
-      </header>
+      </div>
 
       <form id="article-form" onSubmit={handleSave} className="flex-1 max-w-5xl mx-auto w-full px-6 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Main column */}
