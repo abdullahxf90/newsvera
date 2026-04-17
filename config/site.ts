@@ -15,8 +15,8 @@ export const siteConfig = {
   niche: "Technology & Business",
   categories: [
     { name: "Technology", slug: "technology" },
-    { name: "Business", slug: "business" },
-    { name: "Startups", slug: "startups" },
+    { name: "World", slug: "world" },
+    { name: "Politics", slug: "politics" },
     { name: "AI & Innovation", slug: "ai-innovation" },
     { name: "Cybersecurity", slug: "cybersecurity" },
     { name: "Gadgets", slug: "gadgets" },

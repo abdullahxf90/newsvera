@@ -46,7 +46,7 @@ export default function PressPage() {
           <p className="text-gray-700 dark:text-gray-300 text-sm"><strong>Tagline:</strong> &ldquo;{siteConfig.tagline}&rdquo;</p>
           <p className="text-gray-700 dark:text-gray-300 text-sm"><strong>Primary Color:</strong> Deep Navy (#0A2540)</p>
           <p className="text-gray-700 dark:text-gray-300 text-sm"><strong>Accent Color:</strong> Gold (#C9A961)</p>
-          <p className="text-gray-700 dark:text-gray-300 text-sm"><strong>Coverage Focus:</strong> Technology, Business, AI & Innovation, Cybersecurity, Startups, Markets</p>
+          <p className="text-gray-700 dark:text-gray-300 text-sm"><strong>Coverage Focus:</strong> Technology, Business, AI & Innovation, Cybersecurity, World Politics, Markets</p>
         </div>
       </section>
 
