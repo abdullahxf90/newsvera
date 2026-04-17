@@ -1,14 +1,11 @@
-import { articles } from "@/lib/data/articles";
+import { getLatestArticles } from "@/lib/data/articles";
 import { getAuthorById } from "@/lib/data/authors";
 import { siteConfig } from "@/../../config/site";
 
 export async function GET() {
-  const sorted = [...articles].sort(
-    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-  );
+  const sorted = await getLatestArticles(20);
 
   const items = sorted
-    .slice(0, 20)
     .map((a) => {
       const author = getAuthorById(a.author);
       return `

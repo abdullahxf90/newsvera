@@ -11,15 +11,25 @@ import ArticleCardSkeleton from "@/components/articles/ArticleCardSkeleton";
 import Sidebar from "@/components/articles/Sidebar";
 import AdSlot from "@/components/ads/AdSlot";
 
-export default function HomePage() {
-  const featured = getFeaturedArticles();
-  const latest = getLatestArticles(12);
-  const editorsPicks = getEditorsPicks();
-  const techArticles = getArticlesByCategory("technology").slice(0, 4);
-  const aiArticles = getArticlesByCategory("ai-innovation").slice(0, 4);
-  const worldArticles = getArticlesByCategory("world").slice(0, 4);
-  const politicsArticles = getArticlesByCategory("politics").slice(0, 4);
-  const cyberArticles = getArticlesByCategory("cybersecurity").slice(0, 3);
+export const revalidate = 60;
+
+export default async function HomePage() {
+  const [featured, latest, editorsPicks, techArticles, aiArticles, worldArticles, politicsArticles, cyberArticles] =
+    await Promise.all([
+      getFeaturedArticles(),
+      getLatestArticles(12),
+      getEditorsPicks(),
+      getArticlesByCategory("technology"),
+      getArticlesByCategory("ai-innovation"),
+      getArticlesByCategory("world"),
+      getArticlesByCategory("politics"),
+      getArticlesByCategory("cybersecurity"),
+    ]);
+  const techSlice = techArticles.slice(0, 4);
+  const aiSlice = aiArticles.slice(0, 4);
+  const worldSlice = worldArticles.slice(0, 4);
+  const politicsSlice = politicsArticles.slice(0, 4);
+  const cyberSlice = cyberArticles.slice(0, 3);
   const hero = featured[0];
   const secondary = featured.slice(1, 4);
 
@@ -100,8 +110,8 @@ export default function HomePage() {
                 </Link>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                {techArticles.length > 0
-                  ? techArticles.map((article) => (
+                {techSlice.length > 0
+                  ? techSlice.map((article) => (
                       <ArticleCard key={article.id} article={article} />
                     ))
                   : Array.from({ length: 4 }).map((_, i) => (
@@ -123,8 +133,8 @@ export default function HomePage() {
                 </Link>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                {aiArticles.length > 0
-                  ? aiArticles.map((article) => (
+                {aiSlice.length > 0
+                  ? aiSlice.map((article) => (
                       <ArticleCard key={article.id} article={article} />
                     ))
                   : Array.from({ length: 4 }).map((_, i) => (
@@ -144,8 +154,8 @@ export default function HomePage() {
                 </Link>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                {worldArticles.length > 0
-                  ? worldArticles.map((article) => (
+                {worldSlice.length > 0
+                  ? worldSlice.map((article) => (
                       <ArticleCard key={article.id} article={article} />
                     ))
                   : Array.from({ length: 4 }).map((_, i) => (
@@ -165,8 +175,8 @@ export default function HomePage() {
                 </Link>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                {politicsArticles.length > 0
-                  ? politicsArticles.map((article) => (
+                {politicsSlice.length > 0
+                  ? politicsSlice.map((article) => (
                       <ArticleCard key={article.id} article={article} />
                     ))
                   : Array.from({ length: 4 }).map((_, i) => (
@@ -222,8 +232,8 @@ export default function HomePage() {
           </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-          {cyberArticles.length > 0
-            ? cyberArticles.map((article) => (
+          {cyberSlice.length > 0
+            ? cyberSlice.map((article) => (
                 <ArticleCard key={article.id} article={article} />
               ))
             : Array.from({ length: 3 }).map((_, i) => (

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { articles } from "@/lib/data/articles";
+import { getLatestArticles } from "@/lib/data/articles";
 import ArticleCard from "@/components/articles/ArticleCard";
 import { siteConfig } from "@/../../config/site";
 
@@ -10,12 +10,15 @@ interface Props {
   searchParams: { q?: string; category?: string };
 }
 
-export default function SearchPage({ searchParams }: Props) {
+export const revalidate = 60;
+
+export default async function SearchPage({ searchParams }: Props) {
+  const allArticles = await getLatestArticles(1000);
   const query = searchParams.q?.trim().toLowerCase() || "";
   const categoryFilter = searchParams.category || "";
 
   const results = query
-    ? articles.filter((a) => {
+    ? allArticles.filter((a) => {
         const matchesQuery =
           a.title.toLowerCase().includes(query) ||
           a.excerpt.toLowerCase().includes(query) ||

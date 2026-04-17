@@ -10,6 +10,7 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [themeAnim, setThemeAnim] = useState<"dark-falling" | "light-rising" | null>(null);
 
   useEffect(() => {
     const stored = localStorage.getItem("theme");
@@ -26,10 +27,15 @@ export default function Header() {
   }, []);
 
   const toggleDark = () => {
+    if (themeAnim) return;
     const next = !darkMode;
-    setDarkMode(next);
-    document.documentElement.classList.toggle("dark", next);
-    localStorage.setItem("theme", next ? "dark" : "light");
+    setThemeAnim(next ? "dark-falling" : "light-rising");
+    setTimeout(() => {
+      setDarkMode(next);
+      document.documentElement.classList.toggle("dark", next);
+      localStorage.setItem("theme", next ? "dark" : "light");
+    }, 350);
+    setTimeout(() => setThemeAnim(null), 800);
   };
 
   return (
@@ -238,6 +244,9 @@ export default function Header() {
           )}
         </div>
       </nav>
+      {themeAnim && (
+        <div className={`theme-overlay ${themeAnim}`} aria-hidden="true" />
+      )}
     </header>
   );
 }

@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { articles, getArticleBySlug, getRelatedArticles } from "@/lib/data/articles";
+import { getAllSlugs, getArticleBySlug, getRelatedArticles } from "@/lib/data/articles";
 import { getAuthorById } from "@/lib/data/authors";
 import { formatDate } from "@/lib/utils";
 import AdSlot from "@/components/ads/AdSlot";
@@ -13,12 +13,15 @@ interface Props {
   params: { slug: string };
 }
 
+export const revalidate = 60;
+
 export async function generateStaticParams() {
-  return articles.map((a) => ({ slug: a.slug }));
+  const slugs = await getAllSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const article = getArticleBySlug(params.slug);
+  const article = await getArticleBySlug(params.slug);
   if (!article) return { title: "Not Found" };
   const author = getAuthorById(article.author);
   return {
@@ -40,12 +43,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function ArticlePage({ params }: Props) {
-  const article = getArticleBySlug(params.slug);
+export default async function ArticlePage({ params }: Props) {
+  const article = await getArticleBySlug(params.slug);
   if (!article) notFound();
 
   const author = getAuthorById(article.author);
-  const related = getRelatedArticles(article, 3);
+  const related = await getRelatedArticles(article, 3);
 
   const articleSchema = {
     "@context": "https://schema.org",

@@ -1,11 +1,14 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { articles } from "@/lib/data/articles";
+import { getLatestArticles } from "@/lib/data/articles";
 import { formatDateShort } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Archive", description: "Browse all Newsvera articles organized by date." };
 
-export default function ArchivePage() {
+export const revalidate = 60;
+
+export default async function ArchivePage() {
+  const articles = await getLatestArticles(1000);
   const sorted = [...articles].sort(
     (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
   );

@@ -3,9 +3,8 @@ import AdSlot from "@/components/ads/AdSlot";
 import ArticleCard from "./ArticleCard";
 import NewsletterForm from "@/components/ui/NewsletterForm";
 
-export default function Sidebar() {
-  const trending = getTrendingArticles();
-  const editorsPicks = getEditorsPicks();
+export default async function Sidebar() {
+  const [trending, editorsPicks] = await Promise.all([getTrendingArticles(), getEditorsPicks()]);
 
   return (
     <aside className="space-y-8">

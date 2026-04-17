@@ -1,9 +1,11 @@
 import { MetadataRoute } from "next";
-import { articles } from "@/lib/data/articles";
+import { getLatestArticles } from "@/lib/data/articles";
 import { authors } from "@/lib/data/authors";
 import { siteConfig } from "@/../../config/site";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export const revalidate = 3600;
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = siteConfig.url;
 
   const staticPages: MetadataRoute.Sitemap = [
@@ -31,7 +33,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  const articlePages: MetadataRoute.Sitemap = articles.map((a) => ({
+  const allArticles = await getLatestArticles(5000);
+  const articlePages: MetadataRoute.Sitemap = allArticles.map((a) => ({
     url: `${base}/article/${a.slug}`,
     lastModified: new Date(a.updatedAt),
     changeFrequency: "weekly" as const,

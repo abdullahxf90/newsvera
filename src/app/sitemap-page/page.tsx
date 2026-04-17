@@ -1,11 +1,14 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { articles } from "@/lib/data/articles";
+import { getLatestArticles } from "@/lib/data/articles";
 import { siteConfig } from "@/../../config/site";
 
 export const metadata: Metadata = { title: "Sitemap", description: "HTML sitemap of all Newsvera pages and articles." };
 
-export default function SitemapPage() {
+export const revalidate = 3600;
+
+export default async function SitemapPage() {
+  const articles = await getLatestArticles(5000);
   return (
     <div className="max-w-4xl mx-auto px-4 py-10">
       <nav className="text-sm text-gray-500 mb-6">

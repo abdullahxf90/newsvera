@@ -24,11 +24,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function CategoryPage({ params }: Props) {
+export const revalidate = 60;
+
+export default async function CategoryPage({ params }: Props) {
   const category = siteConfig.categories.find((c) => c.slug === params.slug);
   if (!category) notFound();
 
-  const articles = getArticlesByCategory(params.slug);
+  const articles = await getArticlesByCategory(params.slug);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">

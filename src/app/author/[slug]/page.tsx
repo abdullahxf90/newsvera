@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { authors, getAuthorBySlug } from "@/lib/data/authors";
-import { articles } from "@/lib/data/articles";
+import { getArticlesByAuthor } from "@/lib/data/articles";
 import ArticleCard from "@/components/articles/ArticleCard";
 import { siteConfig } from "@/../../config/site";
 
@@ -24,11 +24,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function AuthorPage({ params }: Props) {
+export const revalidate = 60;
+
+export default async function AuthorPage({ params }: Props) {
   const author = getAuthorBySlug(params.slug);
   if (!author) notFound();
 
-  const authorArticles = articles.filter((a) => a.author === author.id);
+  const authorArticles = await getArticlesByAuthor(author.id);
 
   const personSchema = {
     "@context": "https://schema.org",
